@@ -1,27 +1,31 @@
 package zadaci;
 
+import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.support.ConnectionSource;
+
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Zadatak4BrisanjeVrednosti {
     public static void main(String[] args) {
-        Connection c = null;
-
+        ConnectionSource connectionSource = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:avionRobaSQLite.db");
+            // create our data-source for the database
+            connectionSource = new JdbcConnectionSource("jdbc:sqlite:avionRoba.db");
 
-
-        } catch (Exception e ) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }catch (Exception e) {
+            e.printStackTrace();
         }finally {
-            try {
-                c.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            if (connectionSource != null) {
+                try {
+                    connectionSource.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        }
 
+        }
     }
 }
